@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duegosoft.safety.jobrisk.jsa">
+	<!-- VO 시작 -->
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaVO" id="JsaVO">
+		<result property="sjSeq"    column="SJ_SEQ" />
+		<result property="sjTitle"    column="SJ_TITLE" />
+		<result property="sjNo"    column="SJ_NO" />
+		<result property="sjDate"    column="SJ_DATE" />
+		<result property="sjContent"    column="SJ_CONTENT" />
+		<result property="sjName"    column="SJ_NAME" />
+		<result property="sjStartDate"    column="SJ_START_DATE" />
+		<result property="sjEndDate"    column="SJ_END_DATE" />
+		<result property="sjJraNo"    column="SJ_JRA_NO" />
+		<result property="sjJraSev"    column="SJ_JRA_SEV" />
+		<result property="sjJraFreq"    column="SJ_JRA_FREQ" />
+		<result property="sjJraPoint"    column="SJ_JRA_POINT" />
+		<result property="sjDrft1"    column="SJ_DRFT1" />
+		<result property="sjDrft2"    column="SJ_DRFT2" />
+		<result property="sjDrft3"    column="SJ_DRFT3" />
+		<result property="sjDrft4"    column="SJ_DRFT4" />
+		<result property="sjDrft5"    column="SJ_DRFT5" />
+		<result property="sjState"    column="SJ_STATE" />
+		<result property="caCd"    column="CA_CD" />
+		<result property="regId"    column="REG_ID" />
+		<result property="regDate"    column="REG_DATE" />
+		<result property="modId"    column="MOD_ID" />
+		<result property="modDate"    column="MOD_DATE" />
+
+		<result property="cuName"    column="CU_NAME" />
+		<result property="regCedName"    column="REG_CED_NAME" />
+		<result property="modName"    column="MOD_NAME" />
+		<result property="modCedName"    column="MOD_CED_NAME" />
+
+		<association property="approvalVO" resultMap="com.duegosoft.common.approval.ApprovalVO"></association>
+		<collection property="jsaProcList" column="{sjSeq=SJ_SEQ}" select="selectJsaProcList"/>
+		<collection property="fileList" select="com.duegosoft.common.common.selectCommFileList" column="ccfRefrnNo=SJ_SEQ, ccfRefrnSe1=CCF_REFRN_SE1"></collection>
+	</resultMap>
+
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaProcessVO" id="JsaProcessVO">
+		<result property="sjSeq"    column="SJ_SEQ" />
+		<result property="sjpSeq"    column="SJP_SEQ" />
+		<result property="sjpProcess"    column="SJP_PROCESS" />
+
+		<collection property="jsaItemList" column="{sjpSeq=SJP_SEQ}" select="selectJsaItemList"/>
+	</resultMap>
+
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaItemVO" id="JsaItemVO">
+		<result property="sjSeq"    column="SJ_SEQ" />
+		<result property="sjpSeq"    column="SJP_SEQ" />
+		<result property="sjiSeq"    column="SJI_SEQ" />
+		<result property="sjiRisk"    column="SJI_RISK" />
+		<result property="sjiSev"    column="SJI_SEV" />
+		<result property="sjiFreq"    column="SJI_FREQ" />
+		<result property="sjiPoint"    column="SJI_POINT" />
+		<result property="sjiItem"    column="SJI_ITEM" />
+		<result property="sjiCurrSev"    column="SJI_CURR_SEV" />
+		<result property="sjiCurrFreq"    column="SJI_CURR_FREQ" />
+		<result property="sjiCurrPoint"    column="SJI_CURR_POINT" />
+		<result property="sjiMeasures"    column="SJI_MEASURES" />
+		<result property="sjiMeasuresSev"    column="SJI_MEASURES_SEV" />
+		<result property="sjiMeasuresFreq"    column="SJI_MEASURES_FREQ" />
+		<result property="sjiMeasuresPoint"    column="SJI_MEASURES_POINT" />
+		<result property="sjiTeamName"    column="SJI_TEAM_NAME" />
+		<result property="regId"    column="REG_ID" />
+		<result property="regDate"    column="REG_DATE" />
+		<result property="modId"    column="MOD_ID" />
+		<result property="modDate"    column="MOD_DATE" />
+
+		<result property="colorYn"    column="COLOR_YN" />
+	</resultMap>
+
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaTypeVO" id="JsaTypeVO">
+		<result property="sjtSeq"    column="SJT_SEQ" />
+		<result property="sjtType"    column="SJT_TYPE" />
+		<result property="sjtState"    column="SJT_STATE" />
+		<result property="sjtOrder"    column="SJT_ORDER" />
+		<result property="caCd"    column="CA_CD" />
+		<result property="sjtRegDate"    column="SJT_REG_DATE" />
+		<result property="sjtRegId"    column="SJT_REG_ID" />
+		<result property="sjtModDate"    column="SJT_MOD_DATE" />
+		<result property="sjtModId"    column="SJT_MOD_ID" />
+
+		<collection property="jsaDivList" column="{sjtSeq=SJT_SEQ}" select="selectJsaDivList"/>
+	</resultMap>
+
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaDivVO" id="JsaDivVO">
+		<result property="sjtSeq"    column="SJT_SEQ" />
+		<result property="sjdSeq"    column="SJD_SEQ" />
+		<result property="sjdRisk"    column="SJD_RISK" />
+		<result property="sjdSev"    column="SJD_SEV" />
+		<result property="sjdFreq"    column="SJD_FREQ" />
+		<result property="sjdPoint"    column="SJD_POINT" />
+		<result property="sjdState"    column="SJD_STATE" />
+		<result property="sjdOrder"    column="SJD_ORDER" />
+		<result property="sjdRegDate"    column="SJD_REG_DATE" />
+		<result property="sjdRegId"    column="SJD_REG_ID" />
+		<result property="sjdModDate"    column="SJD_MOD_DATE" />
+		<result property="sjdModId"    column="SJD_MOD_ID" />
+
+		<collection property="jsaDivItemList" column="{sjdSeq=SJD_SEQ}" select="selectJsaDivItemList"/>
+	</resultMap>
+
+	<resultMap type="com.duegosoft.safety.jobrisk.jsa.vo.JsaDivItemVO" id="JsaDivItemVO">
+		<result property="sjtSeq"    column="SJT_SEQ" />
+		<result property="sjdSeq"    column="SJD_SEQ" />
+		<result property="sjdiSeq"    column="SJDI_SEQ" />
+		<result property="sjdiItem"    column="SJDI_ITEM" />
+		<result property="sjdiState"    column="SJDI_STATE" />
+		<result property="sjdiOrder"    column="SJDI_ORDER" />
+		<result property="regDate"    column="REG_DATE" />
+		<result property="regId"    column="REG_ID" />
+		<result property="modDate"    column="MOD_DATE" />
+		<result property="modId"    column="MOD_ID" />
+		<result property="sjdiSev"    column="SJDI_SEV" />
+		<result property="sjdiFreq"    column="SJDI_FREQ" />
+		<result property="sjdiPoint"    column="SJDI_POINT" />
+	</resultMap>
+	<!-- VO 종료 -->
+
+	<sql id="search">
+		<if test="searchStartDate != null and !searchStartDate.isEmpty()">
+			AND REG_DATE >= CONVERT(DATETIME, #{searchStartDate})
+		</if>
+		<if test="searchEndDate != null and !searchEndDate.isEmpty()">
+			AND REG_DATE <![CDATA[<]]> CONVERT(DATETIME, #{searchEndDate})+1
+		</if>
+		<if test="searchSjTitle != null and !searchSjTitle.isEmpty()">
+			AND SJ_TITLE LIKE '%' +  #{searchSjTitle} + '%'
+		</if>
+		<if test="caCd != null and !caCd.isEmpty()">
+			AND CED.CA_CD = #{caCd}
+		</if>
+		<if test="searchCedCd != null and !searchCedCd.isEmpty()">
+			AND CED.CED_CD = #{searchCedCd}
+		</if>
+	<!-- 	<if test="sjState != null or !sjState.isEmpty()"> -->
+	<!-- 		AND (SJ_STATE NOT IN ('T') -->
+	<!-- 		OR SJ_STATE = #{sjState} AND SJ.REG_ID = #{loginId}) -->
+	<!-- 	</if> -->
+	</sql>
+	<!-- 조회 조건 종료 -->
+
+	<!-- S_JSA 시작 -->
+	<select id="getJsaCnt" resultType="Integer">
+		SELECT COUNT(DISTINCT SJ.SJ_SEQ)
+	 	FROM S_JSA SJ
+		INNER JOIN C_USER CU ON (CU.CU_SABUN = SJ.REG_ID)
+		INNER JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		LEFT JOIN C_USER CU2 ON (CU2.CU_SABUN = SJ.MOD_ID)
+		LEFT JOIN C_ERP_DEPT CED2 ON (CED2.CED_CD = CU2.CED_CD)
+		<where>
+			<include refid="search"></include>
+		</where>
+	</select>
+
+	<select id="selectJsaList" resultMap="JsaVO">
+		<include refid="com.duegosoft.common.common.queryForPagingHeader"/>
+			SELECT
+				SJ_SEQ
+				,SJ_TITLE
+				,SJ_NO
+				,SJ_DATE
+				,SJ_CONTENT
+				,SJ_NAME
+				,SJ_START_DATE
+				,SJ_END_DATE
+				,SJ_JRA_NO
+				,SJ_JRA_SEV
+				,SJ_JRA_FREQ
+				,SJ_JRA_POINT
+				,SJ_DRFT1
+				,SJ_DRFT2
+				,SJ_DRFT3
+				,SJ_DRFT4
+				,SJ_DRFT5
+				,SJ_STATE
+				,SJ.CA_CD
+				,REG_ID
+				,REG_DATE
+				,MOD_ID
+				,MOD_DATE
+				,CU_NAME
+				,REG_CED_NAME
+				,MOD_NAME
+				,MOD_CED_NAME
+				,CA_STATE
+				,'S_JSA' AS CCF_REFRN_SE1
+			FROM(
+				SELECT SJ.*
+					, CU.CU_NAME
+					, CU.CU_CD
+					, CED.CED_NAME AS REG_CED_NAME
+					, CA.*
+					, CU2.CU_NAME AS MOD_NAME
+					, CED2.CED_NAME AS MOD_CED_NAME
+				FROM S_JSA SJ
+				INNER JOIN C_USER CU ON (CU.CU_SABUN = SJ.REG_ID)
+				INNER JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+				LEFT JOIN C_USER CU2 ON (CU2.CU_SABUN = SJ.MOD_ID)
+				LEFT JOIN C_ERP_DEPT CED2 ON (CED2.CED_CD = CU2.CED_CD)
+				LEFT JOIN C_APPROVAL CA ON (CA.CA_FROM_TBL = 'JSA' AND  SJ.SJ_SEQ = CA.CA_FROM_TBL_SEQ)
+				 <where>
+					<include refid="search"></include>
+				 </where>
+			) SJ
+			<choose>
+				<when test="sortCol != null and !sortCol.isEmpty()">
+					ORDER BY ${sortCol} ${sortOrder}
+				</when>
+				<otherwise>
+					ORDER BY SJ_SEQ DESC
+				</otherwise>
+			</choose>
+		<include refid="com.duegosoft.common.common.queryForPagingFooter"/>
+	</select>
+
+	<select id="selectJsaDetail" resultMap="JsaVO">
+		SELECT
+			SJ_SEQ
+			,SJ_TITLE
+			,SJ_NO
+			,SJ_DATE
+			,SJ_CONTENT
+			,SJ_NAME
+			,SJ_START_DATE
+			,SJ_END_DATE
+			,SJ_JRA_NO
+			,SJ_JRA_SEV
+			,SJ_JRA_FREQ
+			,SJ_JRA_POINT
+			,SJ_DRFT1
+			,SJ_DRFT2
+			,SJ_DRFT3
+			,SJ_DRFT4
+			,SJ_DRFT5
+			,SJ_STATE
+			,SJ.CA_CD
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+			,CU_NAME
+			, 'S_JSA' AS CCF_REFRN_SE1
+			,CA_STATE
+		FROM S_JSA SJ
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJ.REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		LEFT JOIN C_APPROVAL CA ON (CA.CA_FROM_TBL = 'JSA' AND CA.CA_FROM_TBL_SEQ = SJ.SJ_SEQ)
+		WHERE SJ_SEQ = #{sjrSeq}
+	</select>
+
+	<select id="selectJsaFromNoDetail" resultMap="JsaVO">
+		SELECT
+			SJ_SEQ
+			,SJ_TITLE
+			,SJ_NO
+			,SJ_DATE
+			,SJ_CONTENT
+			,SJ_NAME
+			,SJ_START_DATE
+			,SJ_END_DATE
+			,SJ_JRA_NO
+			,SJ_JRA_SEV
+			,SJ_JRA_FREQ
+			,SJ_JRA_POINT
+			,SJ_DRFT1
+			,SJ_DRFT2
+			,SJ_DRFT3
+			,SJ_DRFT4
+			,SJ_DRFT5
+			,SJ_STATE
+			,SJ.CA_CD
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+			,CU_NAME
+			, 'S_JSA' AS CCF_REFRN_SE1
+			,CA_STATE
+		FROM S_JSA SJ
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJ.REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		LEFT JOIN C_APPROVAL CA ON (CA.CA_FROM_TBL = 'JSA' AND CA.CA_FROM_TBL_SEQ = SJ.SJ_SEQ)
+		WHERE SJ_NO = #{sjNo}
+	</select>
+
+	<insert id="insertJsa">
+		<selectKey keyProperty="sjSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJ_SEQ
+		</selectKey>
+		INSERT INTO S_JSA (
+			SJ_SEQ
+			,SJ_TITLE
+			,SJ_NO
+			,SJ_DATE
+			,SJ_CONTENT
+			,SJ_NAME
+			,SJ_START_DATE
+			,SJ_END_DATE
+			,SJ_JRA_NO
+			,SJ_JRA_SEV
+			,SJ_JRA_FREQ
+			,SJ_JRA_POINT
+			,SJ_DRFT1
+			,SJ_DRFT2
+			,SJ_DRFT3
+			,SJ_DRFT4
+			,SJ_DRFT5
+			,SJ_STATE
+			,CA_CD
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) VALUES(
+			#{sjSeq}
+			,#{sjTitle}
+			,#{sjNo, javaType=String, jdbcType=VARCHAR}
+			,#{sjDate, javaType=Date, jdbcType=TIMESTAMP}
+			,#{sjContent, javaType=String, jdbcType=VARCHAR}
+			,#{sjName, javaType=String, jdbcType=VARCHAR}
+			,#{sjStartDate, javaType=Date, jdbcType=TIMESTAMP}
+			,#{sjEndDate, javaType=Date, jdbcType=TIMESTAMP}
+			,#{sjJraNo, javaType=String, jdbcType=VARCHAR}
+			,#{sjJraSev, javaType=String, jdbcType=VARCHAR}
+			,#{sjJraFreq, javaType=String, jdbcType=VARCHAR}
+			,#{sjJraPoint, javaType=String, jdbcType=VARCHAR}
+			,#{sjDrft1, javaType=String, jdbcType=VARCHAR}
+			,#{sjDrft2, javaType=String, jdbcType=VARCHAR}
+			,#{sjDrft3, javaType=String, jdbcType=VARCHAR}
+			,#{sjDrft4, javaType=String, jdbcType=VARCHAR}
+			,#{sjDrft5, javaType=String, jdbcType=VARCHAR}
+			,#{sjState}
+			,#{caCd}
+			,#{regId}
+			,GETDATE()
+			,#{modId}
+			,GETDATE()
+		)
+	</insert>
+
+	<update id="updateJsa">
+		UPDATE S_JSA SET
+			SJ_TITLE = #{sjTitle}
+			,SJ_DATE = #{sjDate, javaType=Date, jdbcType=TIMESTAMP}
+			,SJ_CONTENT = #{sjContent, javaType=String, jdbcType=VARCHAR}
+			,SJ_NAME = #{sjName, javaType=String, jdbcType=VARCHAR}
+			,SJ_START_DATE = #{sjStartDate, javaType=Date, jdbcType=TIMESTAMP}
+			,SJ_END_DATE = #{sjEndDate, javaType=Date, jdbcType=TIMESTAMP}
+			,SJ_JRA_NO = #{sjJraNo, javaType=String, jdbcType=VARCHAR}
+			,SJ_JRA_SEV = #{sjJraSev, javaType=String, jdbcType=VARCHAR}
+			,SJ_JRA_FREQ = #{sjJraFreq, javaType=String, jdbcType=VARCHAR}
+			,SJ_JRA_POINT = #{sjJraPoint, javaType=String, jdbcType=VARCHAR}
+			,SJ_DRFT1 = #{sjDrft1, javaType=String, jdbcType=VARCHAR}
+			,SJ_DRFT2 = #{sjDrft2, javaType=String, jdbcType=VARCHAR}
+			,SJ_DRFT3 = #{sjDrft3, javaType=String, jdbcType=VARCHAR}
+			,SJ_DRFT4 = #{sjDrft4, javaType=String, jdbcType=VARCHAR}
+			,SJ_DRFT5 = #{sjDrft5, javaType=String, jdbcType=VARCHAR}
+			,SJ_STATE = #{sjState}
+			,MOD_ID = #{modId}
+			,MOD_DATE = GETDATE()
+		WHERE SJ_SEQ = #{sjSeq}
+	</update>
+
+	<update id="updateJsaSttus">
+		UPDATE S_JSA SET
+			SJ_STATE = #{sjState}
+		WHERE SJ_SEQ = #{sjSeq}
+	</update>
+
+	<delete id="deleteJsa">
+		DELETE FROM S_JSA
+		WHERE SJ_SEQ = #{sjSeq}
+	</delete>
+
+	<!-- S_JSA 종료 -->
+
+	<!-- S_JSA_PROCESS 시작 -->
+	<select id="selectJsaProcList" resultMap="JsaProcessVO">
+		SELECT
+			SJ_SEQ
+			,SJP_SEQ
+			,SJP_PROCESS
+		FROM S_JSA_PROCESS
+		WHERE SJ_SEQ = #{sjSeq}
+		ORDER BY SJP_SEQ
+	</select>
+
+	<insert id="insertJsaProc">
+		<selectKey keyProperty="sjpSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJP_SEQ
+		</selectKey>
+		INSERT INTO S_JSA_PROCESS (
+			SJ_SEQ
+			,SJP_SEQ
+			,SJP_PROCESS
+		) VALUES(
+			#{sjSeq}
+			,#{sjpSeq}
+			,#{sjpProcess}
+		)
+	</insert>
+
+	<update id="updateJsaProc">
+		UPDATE S_JSA_PROCESS SET
+			SJP_PROCESS = #{sjpProcess}
+		WHERE SJ_SEQ = #{sjSeq}
+		  AND SJP_SEQ = #{sjpSeq}
+	</update>
+
+	<delete id="deleteJsaProc">
+		DELETE FROM S_JSA_PROCESS
+		WHERE SJ_SEQ = #{sjSeq}
+	</delete>
+
+	<!-- S_JSA_PROCESS 종료 -->
+
+	<!-- S_JSA_ITEM 시작 -->
+	<select id="selectJsaItemList" resultMap="JsaItemVO">
+		SELECT
+			TA.SJ_SEQ
+			,TA.SJP_SEQ
+			,TA.SJI_SEQ
+			,TA.SJI_RISK
+			,CASE WHEN TB.SJD_RISK IS NULL THEN 'Y' ELSE 'N' END AS COLOR_YN
+			,TA.SJI_SEV
+			,TA.SJI_FREQ
+			,TA.SJI_POINT
+			,TA.SJI_ITEM
+			,TA.SJI_CURR_SEV
+			,TA.SJI_CURR_FREQ
+			,TA.SJI_CURR_POINT
+			,TA.SJI_MEASURES
+			,TA.SJI_MEASURES_SEV
+			,TA.SJI_MEASURES_FREQ
+			,TA.SJI_MEASURES_POINT
+			,TA.SJI_TEAM_NAME
+			,TA.REG_ID
+			,TA.REG_DATE
+			,TA.MOD_ID
+			,TA.MOD_DATE
+		FROM S_JSA_ITEM TA
+		LEFT JOIN (
+			SELECT DISTINCT SJD_RISK
+			FROM S_JSA_DIV SJD
+			WHERE SJD_STATE = 'A'
+		) TB ON (REPLACE(TB.SJD_RISK, ' ', '') = REPLACE(TA.SJI_RISK, ' ', ''))
+		WHERE TA.SJP_SEQ =  #{sjpSeq}
+		ORDER BY TA.SJI_SEQ
+	</select>
+
+	<insert id="insertJsaItem">
+		<selectKey keyProperty="sjiSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJI_SEQ
+		</selectKey>
+		INSERT INTO S_JSA_ITEM (
+			SJ_SEQ
+			,SJP_SEQ
+			,SJI_SEQ
+			,SJI_RISK
+			,SJI_SEV
+			,SJI_FREQ
+			,SJI_POINT
+			,SJI_ITEM
+			,SJI_CURR_SEV
+			,SJI_CURR_FREQ
+			,SJI_CURR_POINT
+			,SJI_MEASURES
+			,SJI_MEASURES_SEV
+			,SJI_MEASURES_FREQ
+			,SJI_MEASURES_POINT
+			,SJI_TEAM_NAME
+			,REG_ID
+			,REG_DATE
+			,MOD_ID
+			,MOD_DATE
+		) VALUES(
+			#{sjSeq}
+			,#{sjpSeq}
+			,#{sjiSeq}
+			,#{sjiRisk, javaType=String, jdbcType=VARCHAR}
+			,#{sjiSev, javaType=String, jdbcType=VARCHAR}
+			,#{sjiFreq, javaType=String, jdbcType=VARCHAR}
+			,#{sjiPoint, javaType=String, jdbcType=VARCHAR}
+			,#{sjiItem, javaType=String, jdbcType=VARCHAR}
+			,#{sjiCurrSev, javaType=String, jdbcType=VARCHAR}
+			,#{sjiCurrFreq, javaType=String, jdbcType=VARCHAR}
+			,#{sjiCurrPoint, javaType=String, jdbcType=VARCHAR}
+			,#{sjiMeasures, javaType=String, jdbcType=VARCHAR}
+			,#{sjiMeasuresSev, javaType=String, jdbcType=VARCHAR}
+			,#{sjiMeasuresFreq, javaType=String, jdbcType=VARCHAR}
+			,#{sjiMeasuresPoint, javaType=String, jdbcType=VARCHAR}
+			,#{sjiTeamName, javaType=String, jdbcType=VARCHAR}
+			,#{regId}
+			,GETDATE()
+			,#{modId}
+			,GETDATE()
+		)
+	</insert>
+
+	<update id="updateJsaItem">
+		UPDATE S_JSA_ITEM SET
+			SJI_RISK = #{sjiRisk, javaType=String, jdbcType=VARCHAR}
+			,SJI_SEV = #{sjiSev, javaType=String, jdbcType=VARCHAR}
+			,SJI_FREQ = #{sjiFreq, javaType=String, jdbcType=VARCHAR}
+			,SJI_POINT = #{sjiPoint, javaType=String, jdbcType=VARCHAR}
+			,SJI_ITEM = #{sjiItem, javaType=String, jdbcType=VARCHAR}
+			,SJI_CURR_SEV = #{sjiCurrSev, javaType=String, jdbcType=VARCHAR}
+			,SJI_CURR_FREQ = #{sjiCurrFreq, javaType=String, jdbcType=VARCHAR}
+			,SJI_CURR_POINT = #{sjiCurrPoint, javaType=String, jdbcType=VARCHAR}
+			,SJI_MEASURES = #{sjiMeasures, javaType=String, jdbcType=VARCHAR}
+			,SJI_MEASURES_SEV = #{sjiMeasuresSev, javaType=String, jdbcType=VARCHAR}
+			,SJI_MEASURES_FREQ = #{sjiMeasuresFreq, javaType=String, jdbcType=VARCHAR}
+			,SJI_MEASURES_POINT = #{sjiMeasuresPoint, javaType=String, jdbcType=VARCHAR}
+			,SJI_TEAM_NAME = #{sjiTeamName, javaType=String, jdbcType=VARCHAR}
+			,MOD_ID = #{modId}
+			,MOD_DATE = GETDATE()
+		WHERE SJ_SEQ = #{sjSeq}
+		  AND SJP_SEQ = #{sjpSeq}
+	</update>
+
+	<delete id="deleteJsaItem">
+		DELETE FROM S_JSA_ITEM
+		WHERE SJ_SEQ = #{sjSeq}
+	</delete>
+
+	<!-- S_JSA_ITEM 종료 -->
+
+	<!-- S_JSA_TYPE 시작 -->
+	<select id="selectJsaTypeList" resultMap="JsaTypeVO">
+		SELECT SJT_SEQ
+			,SJT_TYPE
+			,SJT_STATE
+			,SJT_ORDER
+			,CA_CD
+			,SJT_REG_DATE
+			,SJT_REG_ID
+			,SJT_MOD_DATE
+			,SJT_MOD_ID
+			,'S_JSA_TYPE' AS CCF_REFRN_SE1
+		FROM S_JSA_TYPE SJT
+		WHERE SJT_STATE = 'A'
+		  AND CA_CD = #{caCd}
+		ORDER BY SJT_ORDER ASC
+	</select>
+
+	<select id="selectJsaTypeDetail" resultMap="JsaTypeVO">
+		SELECT SJT_SEQ
+			,SJT_TYPE
+			,SJT_STATE
+			,SJT_ORDER
+			,SJT.CA_CD
+			,SJT_REG_DATE
+			,SJT_REG_ID
+			,SJT_MOD_DATE
+			,SJT_MOD_ID
+			,'S_JSA_TYPE' AS CCF_REFRN_SE1
+		FROM S_JSA_TYPE SJT
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJT.SJT_REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		WHERE SJT_SEQ = #{sjtSeq}
+		  AND SJT_STATE = 'A'
+	</select>
+
+	<insert id="insertJsaType">
+		<selectKey keyProperty="sjtSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJT_SEQ
+		</selectKey>
+		INSERT INTO S_JSA_TYPE (
+			SJT_SEQ
+			,SJT_TYPE
+			,SJT_STATE
+			,SJT_ORDER
+			,CA_CD
+			,SJT_REG_DATE
+			,SJT_REG_ID
+			,SJT_MOD_DATE
+			,SJT_MOD_ID
+		) VALUES(
+			#{sjtSeq}
+			,#{sjtType, javaType=String, jdbcType=VARCHAR}
+			,#{sjtState}
+			,(SELECT ISNULL(MAX(SJT_ORDER), 0)+1 FROM S_JSA_TYPE)
+			,#{caCd}
+			,GETDATE()
+			,#{sjtRegId}
+			,GETDATE()
+			,#{sjtModId}
+		)
+	</insert>
+
+	<update id="updateJsaType">
+		UPDATE S_JSA_TYPE SET
+		     SJT_TYPE = #{sjtType, javaType=String, jdbcType=VARCHAR}
+		    , SJT_STATE = #{sjtState}
+		    , CA_CD = #{caCd}
+		    , SJT_MOD_DATE = GETDATE()
+		    , SJT_MOD_ID = #{sjtModId}
+		WHERE SJT_SEQ = #{sjtSeq}
+	</update>
+
+	<delete id="deleteJsaType">
+		UPDATE S_JSA_TYPE SET
+			SJT_STATE = #{sjtState}
+		    , SJT_MOD_DATE = GETDATE()
+		    , SJT_MOD_ID = #{sjtModId}
+		WHERE SJT_SEQ = #{sjtSeq}
+	</delete>
+
+	<select id="selectTypeUpOrder" resultMap="JsaTypeVO">
+		SELECT TOP 1 *
+		FROM S_JSA_TYPE
+		WHERE SJT_ORDER  <![CDATA[ < ]]> #{sjtOrder, javaType=Long ,jdbcType=NUMERIC}
+		ORDER BY SJT_ORDER DESC
+	</select>
+
+	<select id="selectTypeDownOrder" resultMap="JsaTypeVO">
+		SELECT TOP 1 *
+		FROM S_JSA_TYPE
+		WHERE SJT_ORDER  <![CDATA[ > ]]> #{sjtOrder, javaType=Long ,jdbcType=NUMERIC}
+		ORDER BY SJT_ORDER
+	</select>
+
+	<update id="updateTypeOrder"  parameterType="Long">
+		UPDATE S_JSA_TYPE SET
+			SJT_ORDER = #{sjtOrder, javaType=Long ,jdbcType=NUMERIC}
+		 WHERE SJT_SEQ = #{sjtSeq}
+	</update>
+
+	<!-- S_JSA_TYPE 종료 -->
+
+	<!-- S_JSA_DIV 시작 -->
+	<select id="selectJsaDivList" resultMap="JsaDivVO">
+		SELECT SJT_SEQ
+			,SJD_SEQ
+			,SJD_RISK
+			,SJD_SEV
+			,SJD_FREQ
+			,SJD_POINT
+			,SJD_STATE
+			,SJD_ORDER
+			,SJD_REG_DATE
+			,SJD_REG_ID
+			,SJD_MOD_DATE
+			,SJD_MOD_ID
+			, 'S_JSA_DIV' AS CCF_REFRN_SE1
+			FROM(
+				SELECT SJD.*
+					, CU.CU_NAME
+					, CU.CU_CD
+					, CED.CED_NAME AS REG_CED_NAME
+				  FROM S_JSA_DIV SJD
+				 INNER JOIN C_USER CU ON SJD.SJD_REG_ID = CU.CU_SABUN
+				 INNER JOIN C_ERP_DEPT CED ON CU.CED_CD = CED.CED_CD
+		)SJD
+		WHERE SJT_SEQ = #{sjtSeq}
+		  AND SJD_STATE = 'A'
+		ORDER BY SJD_ORDER ASC
+	</select>
+
+	<select id="selectJsaDivRiskList" resultType="String">
+		SELECT DISTINCT SJD_RISK
+		FROM S_JSA_DIV SJD
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJD.SJD_REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		WHERE CED.CA_CD = #{caCd}
+		AND SJD_STATE = 'A'
+	</select>
+
+	<select id="selectJsaDivDetail" resultMap="JsaDivVO">
+		SELECT SJT_SEQ
+			,SJD_SEQ
+			,SJD_RISK
+			,SJD_SEV
+			,SJD_FREQ
+			,SJD_POINT
+			,SJD_STATE
+			,SJD_ORDER
+			,SJD_REG_DATE
+			,SJD_REG_ID
+			,SJD_MOD_DATE
+			,SJD_MOD_ID
+			, 'S_JSA_DIV' AS CCF_REFRN_SE1
+		FROM S_JSA_DIV SJD
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJD.SJD_REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		WHERE SJD_SEQ = #{sjdSeq}
+		  AND SJD_STATE = 'A'
+	</select>
+
+	<insert id="insertJsaDiv">
+		<selectKey keyProperty="sjdSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJD_SEQ
+		</selectKey>
+		INSERT INTO S_JSA_DIV (
+			SJT_SEQ
+			,SJD_SEQ
+			,SJD_RISK
+			,SJD_SEV
+			,SJD_FREQ
+			,SJD_POINT
+			,SJD_STATE
+			,SJD_ORDER
+			,SJD_REG_DATE
+			,SJD_REG_ID
+			,SJD_MOD_DATE
+			,SJD_MOD_ID
+		) VALUES(
+			#{sjtSeq}
+			,#{sjdSeq}
+			,#{sjdRisk}
+			,#{sjdSev}
+			,#{sjdFreq}
+			,#{sjdPoint}
+			,#{sjdState}
+			,(SELECT ISNULL(MAX(SJD_ORDER), 0)+1 FROM S_JSA_DIV WHERE SJT_SEQ = #{sjtSeq})
+			,GETDATE()
+			,#{sjdRegId}
+			,GETDATE()
+			,#{sjdModId}
+		)
+	</insert>
+
+	<update id="updateJsaDiv">
+		UPDATE S_JSA_DIV SET
+		     SJD_RISK = #{sjdRisk}
+		    , SJD_SEV = #{sjdSev}
+		    , SJD_FREQ = #{sjdFreq}
+		    , SJD_POINT = #{sjdPoint}
+		    , SJD_STATE = #{sjdState}
+		    , SJD_MOD_DATE = GETDATE()
+		    , SJD_MOD_ID = #{sjdModId}
+		WHERE SJT_SEQ = #{sjtSeq}
+		  AND SJD_SEQ = #{sjdSeq}
+	</update>
+
+	<delete id="deleteJsaDiv">
+		UPDATE S_JSA_DIV SET
+			SJD_STATE = #{sjdState}
+			, SJD_MOD_DATE = GETDATE()
+		    , SJD_MOD_ID = #{sjdModId}
+		WHERE SJD_SEQ = #{sjdSeq}
+	</delete>
+
+	<select id="selectDivUpOrder" resultMap="JsaDivVO">
+		SELECT TOP 1 *
+		FROM S_JSA_DIV
+		WHERE SJD_ORDER  <![CDATA[ < ]]> #{sjdOrder, javaType=Long ,jdbcType=NUMERIC}
+		 AND SJT_SEQ = #{sjtSeq}
+		 AND SJD_STATE = 'A'
+		ORDER BY SJD_ORDER DESC
+	</select>
+
+	<select id="selectDivDownOrder" resultMap="JsaDivVO">
+		SELECT TOP 1 *
+		FROM S_JSA_DIV
+		WHERE SJD_ORDER  <![CDATA[ > ]]> #{sjdOrder, javaType=Long ,jdbcType=NUMERIC}
+		 AND SJT_SEQ = #{sjtSeq}
+		 AND SJD_STATE = 'A'
+		ORDER BY SJD_ORDER
+	</select>
+
+	<update id="updateDivOrder"  parameterType="Long">
+		UPDATE S_JSA_DIV SET
+			SJD_ORDER = #{sjdOrder, javaType=Long ,jdbcType=NUMERIC}
+		 WHERE SJD_SEQ = #{sjdSeq}
+	</update>
+	<!-- S_JSA_DIV 종료 -->
+
+	<!-- S_JSA_DIV_ITEM 시작 -->
+	<select id="selectJsaDivItemList" resultMap="JsaDivItemVO">
+		SELECT SJT_SEQ
+			,SJD_SEQ
+			,SJDI_SEQ
+			,SJDI_ITEM
+			,SJDI_STATE
+			,SJDI_ORDER
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+			,SJDI_SEV
+			,SJDI_FREQ
+			,SJDI_POINT
+			, 'S_JSA_DIV_ITEM' AS CCF_REFRN_SE1
+		FROM(
+			SELECT SJDI.*
+				, CU.CU_NAME
+				, CU.CU_CD
+				, CED.CED_NAME AS REG_CED_NAME
+			  FROM S_JSA_DIV_ITEM SJDI
+			 INNER JOIN C_USER CU ON SJDI.REG_ID = CU.CU_SABUN
+			 INNER JOIN C_ERP_DEPT CED ON CU.CED_CD = CED.CED_CD
+		)SJDI
+		WHERE SJT_SEQ = #{sjtSeq}
+		  AND SJD_SEQ = #{sjdSeq}
+		   AND SJDI_STATE = 'A'
+		ORDER BY SJDI_ORDER ASC
+	</select>
+
+	<select id="selectJsaDivItemDetail" resultMap="JsaDivItemVO">
+		SELECT SJT_SEQ
+			,SJD_SEQ
+			,SJDI_SEQ
+			,SJDI_ITEM
+			,SJDI_STATE
+			,SJDI_ORDER
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+			,SJDI_SEV
+			,SJDI_FREQ
+			,SJDI_POINT
+			, 'S_JSA_DIV_ITEM' AS CCF_REFRN_SE1
+		FROM S_JSA_DIV_ITEM SJDI
+		LEFT JOIN C_USER CU ON (CU.CU_SABUN = SJDI.REG_ID)
+		LEFT JOIN C_ERP_DEPT CED ON (CED.CED_CD = CU.CED_CD)
+		WHERE SJDI_SEQ = #{sjdiSeq}
+		  AND SJDI_STATE = 'A'
+	</select>
+
+	<insert id="insertJsaDivItem">
+		<selectKey keyProperty="sjdiSeq" resultType="Long" order="BEFORE">
+			SELECT NEXT VALUE FOR SJDI_SEQ
+		</selectKey>
+		INSERT INTO S_JSA_DIV_ITEM (
+			SJT_SEQ
+			,SJD_SEQ
+			,SJDI_SEQ
+			,SJDI_ITEM
+			,SJDI_STATE
+			,SJDI_ORDER
+			,REG_DATE
+			,REG_ID
+			,MOD_DATE
+			,MOD_ID
+			,SJDI_SEV
+			,SJDI_FREQ
+			,SJDI_POINT
+		) VALUES(
+			#{sjtSeq}
+			,#{sjdSeq}
+			,#{sjdiSeq}
+			,#{sjdiItem}
+			,#{sjdiState}
+			,(SELECT ISNULL(MAX(SJDI_ORDER), 0)+1 FROM S_JSA_DIV_ITEM WHERE SJD_SEQ = #{sjdSeq})
+			,GETDATE()
+			,#{regId}
+			,GETDATE()
+			,#{modId}
+			,#{sjdiSev, javaType=String, jdbcType=VARCHAR}
+			,#{sjdiFreq, javaType=String, jdbcType=VARCHAR}
+			,#{sjdiPoint, javaType=String, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateJsaDivItem">
+		UPDATE S_JSA_DIV_ITEM SET
+		     SJDI_ITEM = #{sjdiItem}
+		    , SJDI_STATE = #{sjdiState}
+		    , MOD_DATE = GETDATE()
+		    , MOD_ID = #{modId}
+		    , SJDI_SEV = #{sjdiSev, javaType=String, jdbcType=VARCHAR}
+		    , SJDI_FREQ = #{sjdiFreq, javaType=String, jdbcType=VARCHAR}
+		    , SJDI_POINT = #{sjdiPoint, javaType=String, jdbcType=VARCHAR}
+		 WHERE SJT_SEQ = #{sjtSeq}
+		   AND SJD_SEQ = #{sjdSeq}
+		   AND SJDI_SEQ = #{sjdiSeq}
+	</update>
+
+	<delete id="deleteJsaDivItem">
+		UPDATE S_JSA_DIV_ITEM SET
+			SJDI_STATE = #{sjdiState}
+			, MOD_DATE = GETDATE()
+		    , MOD_ID = #{modId}
+		WHERE SJDI_SEQ = #{sjdiSeq}
+	</delete>
+
+	<select id="selectDivItemUpOrder" resultMap="JsaDivItemVO">
+		SELECT TOP 1 *
+		FROM S_JSA_DIV_ITEM
+		WHERE SJDI_ORDER  <![CDATA[ < ]]> #{sjdiOrder, javaType=Long ,jdbcType=NUMERIC}
+		  AND SJD_SEQ = #{sjdSeq}
+		  AND SJDI_STATE = 'A'
+		ORDER BY SJDI_ORDER DESC
+	</select>
+
+	<select id="selectDivItemDownOrder" resultMap="JsaDivItemVO">
+		SELECT TOP 1 *
+		FROM S_JSA_DIV_ITEM
+		WHERE SJDI_ORDER  <![CDATA[ > ]]> #{sjdiOrder, javaType=Long ,jdbcType=NUMERIC}
+		 AND SJD_SEQ = #{sjdSeq}
+		 AND SJDI_STATE = 'A'
+		ORDER BY SJDI_ORDER
+	</select>
+
+	<update id="updateDivItemOrder"  parameterType="Long">
+		UPDATE S_JSA_DIV_ITEM SET
+			SJDI_ORDER = #{sjdiOrder, javaType=Long ,jdbcType=NUMERIC}
+		 WHERE SJDI_SEQ = #{sjdiSeq}
+	</update>
+	<!-- S_JSA_DIV_ITEM 종료 -->
+
+</mapper>
